@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>One Command Assembler</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: monospace;
+    background-color: #1e1e1e;
+    color: white;
+  }
+
+  #topbar {
+    height: 40px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  #topbar .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #topbar .title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  #topbar button {
+    background-color: #0e639c;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  #container, #outputPage {
+    height: calc(100% - 40px);
+    display: none;
+  }
+
+  #container.active, #outputPage.active {
+    display: block;
+  }
+
+  #outputPage {
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    padding: 10px;
+    gap: 5px;
+    box-sizing: border-box;
+  }
+
+  #outputBox {
+    flex: 1;
+    background-color: #252526;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px;
+    resize: none;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap; /* wrap text */
+    word-wrap: break-word; /* break long words if needed */
+    overflow-y: auto;
+    width: 90%;
+    height: 90%;
+  }
+
+  #outputButtons {
+    display: flex;
+    justify-content: flex-start; /* left align */
+  }
+
+  #outputButtons button {
+    background-color: #0e639c;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  #outputButtons button:hover {
+    background-color: #1177bb;
+  }
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+</head>
+<body>
+  <div id="topbar">
+    <div class="left">
+      <div class="title">One Command Assembler</div>
+      <button id="convertBtn">Convert</button>
+      <button id="backBtn" style="display:none;">Back</button>
+    </div>
+  </div>
+
+  <div id="container" class="active"></div>
+
+  <div id="outputPage">
+    <div id="outputButtons">
+      <button id="copyBtn">Copy</button>
+    </div>
+    <textarea id="outputBox" readonly></textarea>
+  </div>
+
+  <script>
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+    require(["vs/editor/editor.main"], function () {
+      // Register custom language
+      monaco.languages.register({ id: 'simplemc' });
+      monaco.languages.setMonarchTokensProvider('simplemc', {
+        tokenizer: {
+          root: [
+            [/#.*/, "comment"] // anything starting with # is comment
+          ]
+        }
+      });
+
+      // Theme with green comments
+      monaco.editor.defineTheme('dark-with-green-comments', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+          { token: 'comment', foreground: '6A9955' } // green
+        ],
+        colors: {}
+      });
+
+      const editor = monaco.editor.create(document.getElementById('container'), {
+        value: `#One Command Assembler by The_CommanderRS\n#tested on 1.21.4\n\n`,
+        language: 'simplemc',
+        theme: 'dark-with-green-comments',
+        fontSize: 14,
+        minimap: { enabled: false },
+        wordWrap: 'on'
+      });
+
+      const containerEl = document.getElementById('container');
+      const outputPageEl = document.getElementById('outputPage');
+      const convertBtn = document.getElementById('convertBtn');
+      const backBtn = document.getElementById('backBtn');
+      const outputBox = document.getElementById('outputBox');
+      const copyBtn = document.getElementById('copyBtn');
+
+      const oneCMD = {
+        compileCode: (text) => {
+          // Replace with your real compile logic
+          return text.toUpperCase();
+        }
+      };
+
+      convertBtn.addEventListener('click', () => {
+        const text = editor.getValue();
+        outputBox.value = packCommand(text);
+        containerEl.classList.remove('active');
+        outputPageEl.classList.add('active');
+        convertBtn.style.display = 'none';
+        backBtn.style.display = 'inline-block';
+      });
+
+      backBtn.addEventListener('click', () => {
+        outputPageEl.classList.remove('active');
+        containerEl.classList.add('active');
+        backBtn.style.display = 'none';
+        convertBtn.style.display = 'inline-block';
+      });
+
+      copyBtn.addEventListener('click', () => {
+        outputBox.select();
+        document.execCommand('copy');
+      });
+    });
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>
