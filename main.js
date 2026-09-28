@@ -1,5 +1,37 @@
-let oneCMD = 
-{
+const containerEl = document.getElementById("container");
+const outputPageEl = document.getElementById("outputPage");
+const convertBtn = document.getElementById("convertBtn");
+const backBtn = document.getElementById("backBtn");
+const outputBox = document.getElementById("outputBox");
+const copyBtn = document.getElementById("copyBtn");
+
+convertBtn.addEventListener("click", () => {
+    const text = editor.getValue();
+
+    outputBox.value = packCommand(text);
+
+    containerEl.classList.remove("active");
+    outputPageEl.classList.add("active");
+
+    convertBtn.style.display = "none";
+    backBtn.style.display = "inline-block";
+});
+
+backBtn.addEventListener("click", () => {
+    outputPageEl.classList.remove("active");
+    containerEl.classList.add("active");
+
+    backBtn.style.display = "none";
+    convertBtn.style.display = "inline-block";
+});
+
+copyBtn.addEventListener("click", () => {
+    outputBox.select();
+    document.execCommand("copy");
+});
+
+
+const oneCMD = {
     compileCode: function(source) {
         let sourceLines = source.split('\n');
         sourceLines = sourceLines.map(line => line.trim());
