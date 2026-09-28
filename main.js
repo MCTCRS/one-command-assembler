@@ -4,6 +4,7 @@ const convertBtn = document.getElementById("convertBtn");
 const backBtn = document.getElementById("backBtn");
 const outputBox = document.getElementById("outputBox");
 const copyBtn = document.getElementById("copyBtn");
+const modeSelect = document.getElementById("modeSelect");
 
 convertBtn.addEventListener("click", () => {
     const text = editor.getValue();
@@ -30,6 +31,21 @@ copyBtn.addEventListener("click", () => {
     document.execCommand("copy");
 });
 
+modeSelect.addEventListener("change", () => {
+    const text = editor.getValue();
+    outputBox.value = packCommand(text);
+});
+
+const assemblers = {
+    /*str*/ standard: (/*list<str>*/ commands) => {
+        const passengers = `{id:command_block_minecart,Command:"${commands.join('"},{id:command_block_minecart,Command:"')}"}`;
+        return `summon falling_block ~ ~.5 ~ {BlockState:{Name:glass},Passengers:[{id:armor_stand,Small:1,Health:0,Passengers:[{id:item,Item:{id:stone,count:1},Age:5998,Passengers:[{id:falling_block,BlockState:{Name:redstone_block},Passengers:[{id:falling_block,BlockState:{Name:"activator_rail"},Passengers:[${passengers},{id:command_block_minecart,Command:"setblock ~ ~1 ~ command_block{Command:\\"fill ~ ~ ~ ~ ~-4 ~ air\\",auto:1}"},{id:command_block_minecart,Command:"kill @e[type=command_block_minecart,distance=..1]"}]}]}]}]}]}`;
+    },
+    /*str*/ compact: (/*list<str>*/ commands) => {
+        const instructions = commands.reverse().join("\",\"");
+        return `setblock ~ ~ ~ minecraft:command_block[facing=up]{auto:1,components:{custom_data:{cmds:["fill ~ ~1 ~ ~1 ~-1 ~ air strict","${instructions}","data modify block ~ ~1 ~ Command set value \\"data remove block ~ ~-2 ~ components.minecraft:custom_data.cmds[-1]\\""]}},Command:'setblock ~ ~1 ~ minecraft:chain_command_block[facing=up]{auto:1,UpdateLastExecution:0,Command:"setblock ~ ~1 ~ chain_command_block[facing=east]{UpdateLastExecution:0,auto:1,Command:\\\\"setblock ~1 ~ ~ chain_command_block[facing=down]{UpdateLastExecution:1,auto:1,powerd:1,Command:\\\\\\\\\\\\"execute store result block ~ ~ ~ auto byte 0 run setblock ~ ~-1 ~ chain_command_block[facing=west]{UpdateLastExecution:0,auto:1,Command:\\\\\\\\\\\\\\\\\\\\\\\\\\\\"data modify block ~-1 ~ ~ Command set from block ~-1 ~-1 ~ components.minecraft:custom_data.cmds[-1]\\\\\\\\\\\\\\\\\\\\\\\\\\\\"} strict\\\\\\\\\\\\"} strict\\\\"} strict"} strict'} destroy`;
+    }
+}
 
 const oneCMD = {
     compileCode: function(source) {
@@ -44,8 +60,7 @@ const oneCMD = {
             return JSON.stringify(escape).slice(2, -2);
         });
 
-        let passengers = `{id:command_block_minecart,Command:"${sourceLines.join('"},{id:command_block_minecart,Command:"')}"}`;
-        return `summon falling_block ~ ~.5 ~ {BlockState:{Name:glass},Passengers:[{id:armor_stand,Small:1,Health:0,Passengers:[{id:item,Item:{id:stone,count:1},Age:5998,Passengers:[{id:falling_block,BlockState:{Name:redstone_block},Passengers:[{id:falling_block,BlockState:{Name:"activator_rail"},Passengers:[${passengers},{id:command_block_minecart,Command:"setblock ~ ~1 ~ command_block{Command:\\"fill ~ ~ ~ ~ ~-4 ~ air\\",auto:1}"},{id:command_block_minecart,Command:"kill @e[type=command_block_minecart,distance=..1]"}]}]}]}]}]}`;
+        return assemblers[modeSelect.value]([...sourceLines]);
     }
 }
 

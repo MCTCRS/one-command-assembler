@@ -4,39 +4,40 @@
 <head>
   <meta charset="UTF-8">
   <title>One Command Assembler</title>
-
   <link rel="stylesheet" href="style.css">
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
   <script src="editor.js"></script>
 </head>
 
 <body>
-
   <div id="topbar">
     <div class="left">
       <div class="title">One Command Assembler</div>
+      <label for="modeSelect">
+        - <span class="infoIcon">
+          ⓘ
+          <span class="infoTooltip">Choose assembler method
 
-      <button id="convertBtn">Convert</button>
+            <strong>Standard:</strong> falling block and command block minecart method (overhead = 501 + 39 * commands; speed = 4gt; use entities)
+            
+            <strong>Compact:</strong> chained command block loop method (overhead = 856 + 3 * commands; speed = 2gt; entityless)
+          </span>
+        </span>
+        Mode:
+      </label>
 
-      <button id="backBtn" style="display: none;">
-        Back
-      </button>
+      <select id="modeSelect">
+        <option value="standard">Standard</option>
+        <option value="compact">Compact</option>
+      </select>
+      <button id="convertBtn">Convert</button> <button id="backBtn" style="display: none;"> Back </button>
     </div>
   </div>
-
   <div id="container" class="active"></div>
-
   <div id="outputPage">
-    <div id="outputButtons">
-      <button id="copyBtn">Copy</button>
-    </div>
-
-    <textarea id="outputBox" readonly></textarea>
+    <div id="outputButtons"> <button id="copyBtn">Copy</button> </div> <textarea id="outputBox" readonly></textarea>
   </div>
-
   <script src="main.js"></script>
-
 </body>
 
 </html>

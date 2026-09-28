@@ -1,96 +1,160 @@
 html,
 body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: monospace;
-  background-color: #1e1e1e;
-  color: white;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: monospace;
+    background-color: #1e1e1e;
+    color: white;
 }
 
 #topbar {
-  height: 40px;
-  background-color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  box-sizing: border-box;
+    height: 40px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 #topbar .left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #topbar .title {
-  font-weight: bold;
-  font-size: 16px;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 #topbar button {
-  background-color: #0e639c;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 14px;
+    background-color: #0e639c;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
 }
 
 #container,
 #outputPage {
-  height: calc(100% - 40px);
-  display: none;
+    height: calc(100% - 40px);
+    display: none;
 }
 
 #container.active,
 #outputPage.active {
-  display: block;
+    display: block;
 }
 
 #outputPage {
-  display: flex;
-  flex-direction: column;
-  background-color: #1e1e1e;
-  padding: 10px;
-  gap: 5px;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    padding: 10px;
+    gap: 5px;
+    box-sizing: border-box;
 }
 
 #outputBox {
-  flex: 1;
-  background-color: #252526;
-  color: white;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 8px;
-  resize: none;
-  font-family: monospace;
-  font-size: 14px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-y: auto;
-  width: 90%;
-  height: 90%;
+    flex: 1;
+    background-color: #252526;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px;
+    resize: none;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: auto;
+    width: 90%;
+    height: 90%;
 }
 
 #outputButtons {
-  display: flex;
-  justify-content: flex-start;
+    display: flex;
+    justify-content: flex-start;
 }
 
 #outputButtons button {
-  background-color: #0e639c;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 14px;
+    background-color: #0e639c;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
 }
 
 #outputButtons button:hover {
-  background-color: #1177bb;
+    background-color: #1177bb;
+}
+
+#modeSelect {
+    background-color: #252526;
+    border: 1px solid #555;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.infoIcon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+
+    color: #aaa;
+    cursor: help;
+}
+
+.infoTooltip {
+    visibility: hidden;
+    opacity: 0;
+
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 8px);
+    transform: translateX(-50%);
+
+    width: 420px;
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    background-color: #252526;
+    color: white;
+
+    border: 1px solid #555;
+    border-radius: 4px;
+
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+
+    z-index: 9999;
+
+    transition: opacity 0.15s;
+}
+
+.infoIcon:hover .infoTooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.infoTooltip {
+    white-space: pre-line;
 }
