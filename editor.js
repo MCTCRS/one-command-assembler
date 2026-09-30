@@ -44,7 +44,7 @@ require(["vs/editor/editor.main"], function () {
             minimap: {
                 enabled: false
             },
-            wordWrap: "on"
+            wordWrap: "off"
         }
     );
 });
